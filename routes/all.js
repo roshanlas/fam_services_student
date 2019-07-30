@@ -10,7 +10,9 @@ router.get('/', (req, res) => {
 
 
 router.post('/register', async (req, res) => {
-    const student = await StudentModel.findOne({ email: req.body.student.email });
+    const student = await StudentModel.findOne({ email: req.body.email })
+    .then(x=>x).catch(err=>console.log('err', err));
+    
     if(student) {
         res.status(400).send({ msg: 'student exists' })
         return;
@@ -20,7 +22,7 @@ router.post('/register', async (req, res) => {
 
 
     const newStudent = await StudentModel
-    .create(req.body.student)
+    .create(req.body)
     .then(result => {
         res.status(200).send({ msg: 'done' })
     })

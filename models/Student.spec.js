@@ -38,9 +38,9 @@ describe('server', ()=>{
         it('should create a new entry', async () => {
             const response = await app.post('/register').send(
                 {
-                   student: {
-                   name: 'Mary Jane', email: 'mary2@gmail.com', password: 'asd23123' 
-                    }
+                   name: 'Mary Jane',
+                   email: 'mary2@gmail.com',
+                   password: 'asd23123' 
                 }
             ); 
             expect(response.status).toEqual(200);
@@ -56,7 +56,6 @@ describe('server', ()=>{
             ).then(x=>x)
             .catch(err => console.log('err', err))
 
-            console.log(response.body);
             expect(response.status).toEqual(400);
         });
     });  
