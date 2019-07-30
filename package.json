@@ -6,7 +6,7 @@
     "node": "^v10.7.0"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "test": "PORT=5001 NODE_ENV=test jest --detectOpenHandles --forceExit"
   },
   "author": "",
