@@ -10,20 +10,20 @@ const routes = require('./routes/all');
     const port = process.env.PORT || 3011;
     let dbUrl;
     
-    // if (process.env.NODE_ENV == "test") {
-    //     dbUrl = global.__MONGO_URI__;
-    //     console.log('test is', dbUrl)
-    //     global.domain = "http://localhost:" + port
-    // } else {
-    //     dbUrl = keys.mongoURI;
-    // }
+    if (process.env.NODE_ENV == "test") {
+        dbUrl = global.__MONGO_URI__;
+        console.log('test is', dbUrl)
+        global.domain = "http://localhost:" + port
+    } else {
+        dbUrl = keys.mongoURI;
+    }
 
     // console.log(dbUrl)
     // // Connect to mongo with mongoose
-    // await mongoose
-    //     .connect(dbUrl, { useNewUrlParser: true })
-    //     .then(()=> console.log("Db Connected"))
-    //     .catch(err => console.log(err));
+    await mongoose
+        .connect(dbUrl, { useNewUrlParser: true })
+        .then(()=> console.log("Db Connected"))
+        .catch(err => console.log(err));
 
     // Configure express to read body from a POST request
     server.use(bodyParser.urlencoded({ extended: false }));

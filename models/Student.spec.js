@@ -38,9 +38,18 @@ describe('server', ()=>{
         it('should create a new entry', async () => {
             const response = await app.post('/register').send(
                 {
-                   name: 'Mary Jane',
-                   email: 'mary2@gmail.com',
-                   password: 'asd23123' 
+                    "email" : "jane@gmail.com",
+                    "password" : "1111",
+                    "firstName" : "Jane",
+                    "lastName" : "Jo",
+                    "dob" : "030303",
+                    "gender" : "female",
+                    "marriageStatus" : "single",
+                    "occupation" : "student",
+                    "residence" : "Villa",
+                    "city" : "Abuja",
+                    "homeAddress" : "101, Somewhere St.",
+                    "postCode" : "231004",
                 }
             ); 
             expect(response.status).toEqual(200);
@@ -49,9 +58,18 @@ describe('server', ()=>{
         it('should NOT create a new entry if the email exists', async () => {
             const response = await app.post('/register').send(
                 {
-                    student: {
-                   name: 'Mary Jane', email: 'jane@gmail.com', password: 'asd23123' 
-                    }
+                    "email" : "mary2@gmail.com",
+                    "password" : "1111",
+                    "firstName" : "Mary",
+                    "lastName" : "Jo",
+                    "dob" : "030303",
+                    "gender" : "female",
+                    "marriageStatus" : "single",
+                    "occupation" : "student",
+                    "residence" : "Villa",
+                    "city" : "Abuja",
+                    "homeAddress" : "101, Somewhere St.",
+                    "postCode" : "231004",
                 }
             ).then(x=>x)
             .catch(err => console.log('err', err))

@@ -3,10 +3,9 @@ const StudentModel = require('../models/Student');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    // StudentModel.find()
-    //     .then(students => res.json(students))
-    //     .catch(err => console.log(err)) 
-    res.send("done")
+    StudentModel.find()
+        .then(students => res.json(students))
+        .catch(err => console.log(err)) 
 });
 
 
