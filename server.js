@@ -18,7 +18,7 @@ const routes = require('./routes/all');
         dbUrl = keys.mongoURI;
     }
 
-    // console.log(dbUrl)
+   console.log(dbUrl)
     // // Connect to mongo with mongoose
     await mongoose
         .connect(dbUrl, { useNewUrlParser: true })
