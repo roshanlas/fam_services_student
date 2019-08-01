@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
     .then(x=>x).catch(err=>console.log('err', err));
     
     if(student) {
-        res.status(400).send({ msg: 'student exists' });
+        res.status(400).send({ msg: 'An account with that email address exists.' });
         return;
     }
 
