@@ -28,11 +28,10 @@ describe('server', ()=>{
     describe('POST /register', () => {
         beforeEach( async ()=>{
             await StudentModel.insertMany(mockEntries, { ordered: false });          
-            insertedItems = await StudentModel.find();  
-            console.log('itemes are', insertedItems);      
+            insertedItems = await StudentModel.find();    
         });
-        afterEach( ()=>{
-            StudentModel.deleteMany({}).exec()
+        afterEach( async ()=>{
+            await StudentModel.deleteMany({})
             .then(x=>x).catch(err=>console.log(err))
         });
         it('should create a new entry', async () => {
@@ -59,6 +58,28 @@ describe('server', ()=>{
             const response = await app.post('/register').send(
                 {
                     "email" : "mary2@gmail.com",
+                    "password" : "1111",
+                    "firstName" : "Mary",
+                    "lastName" : "Jo",
+                    "dob" : "030303",
+                    "gender" : "female",
+                    "marriageStatus" : "single",
+                    "occupation" : "student",
+                    "residence" : "Villa",
+                    "city" : "Abuja",
+                    "homeAddress" : "101, Somewhere St.",
+                    "postCode" : "231004",
+                }
+            ).then(x=>x)
+            .catch(err => console.log('err', err))
+
+            expect(response.status).toEqual(400);
+        });
+
+        it('should respond with 4xx if submission is not correct', async ()=> {
+            const response = await app.post('/register').send(
+                {
+                    "email" : null,
                     "password" : "1111",
                     "firstName" : "Mary",
                     "lastName" : "Jo",

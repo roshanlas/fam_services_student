@@ -3,9 +3,10 @@ const StudentModel = require('../models/Student');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    StudentModel.find()
-        .then(students => res.json(students))
-        .catch(err => console.log(err)) 
+    // StudentModel.find()
+    //     .then(students => res.json(students))
+    //     .catch(err => console.log(err)) 
+    res.status(200).send("done")
 });
 
 
@@ -14,19 +15,19 @@ router.post('/register', async (req, res) => {
     .then(x=>x).catch(err=>console.log('err', err));
     
     if(student) {
-        res.status(400).send({ msg: 'student exists' })
+        res.status(400).send({ msg: 'student exists' });
         return;
     }
-
-    console.log('student is', student);
-
 
     const newStudent = await StudentModel
     .create(req.body)
     .then(result => {
         res.status(200).send({ msg: 'done' })
     })
-    .catch(err => { console.log(err) });
+    .catch(err => { 
+       console.log('err', err);
+       res.status(400).send({msg: err})
+    });
 });
 
 module.exports = router;

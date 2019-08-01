@@ -24,19 +24,19 @@ const StudentModel =  mongoose.model('students',new Schema ({
     },
     gender: {
         type: String,
-        required: true
+        required: false
     },
     marriageStatus: {
         type: String,
-        required: true
+        required: false
     },
     occupation : {
         type: String,
-        required: true
+        required: false
     },
     residence : {
         type: String,
-        required: true
+        required: false
     },
     city : {
         type: String,
@@ -44,11 +44,11 @@ const StudentModel =  mongoose.model('students',new Schema ({
     },
     homeAddress : {
         type: String,
-        required: true
+        required: false
     },
     postCode : {
         type: String,
-        required: true
+        required: false
     },
     date:{
         type:Date,
