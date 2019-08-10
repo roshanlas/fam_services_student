@@ -62,8 +62,11 @@ router.post('/login', async (req, res) => {
                 };
             }
         );
-
-    };
+    } else {
+        res.status(400).json({
+            msg: 'The email or password was incorrect'    
+        })
+    }
 });
 
 

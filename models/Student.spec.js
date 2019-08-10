@@ -105,6 +105,11 @@ describe('server', ()=>{
             await StudentModel.insertMany(mockEntries, { ordered: false });          
             insertedItems = await StudentModel.find();    
         });
+
+        afterEach( async ()=>{
+            await StudentModel.deleteMany({})
+            .then(x=>x).catch(err=>console.log(err))
+        });
         
         it('should respond with an access token if credentials are correct', async ()=>{
             const response = await app.post('/login').send({
@@ -117,7 +122,17 @@ describe('server', ()=>{
             expect(response.body.firstName).toBeTruthy();
             expect(response.body.lastName).toBeTruthy();
             expect(response.status).toEqual(200);
+        });
 
+        it('should respond with 4xx if credentials are incorrect', async ()=>{
+            const response = await app.post('/login').send({
+                "email" : "@gmail.com",
+                "password" : "1111",
+            }).then(x=>x)
+            .catch(err => console.log('err', err));
+
+            //expect(response.body.msg).toBeTruthy();
+            expect(response.status).toEqual(400);
         });
     })
 });
