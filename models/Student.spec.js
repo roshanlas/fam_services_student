@@ -76,6 +76,7 @@ describe('server', ()=>{
             expect(response.status).toEqual(400);
         });
 
+        
         it('should respond with 4xx if submission is not correct', async ()=> {
             const response = await app.post('/register').send(
                 {
@@ -93,9 +94,28 @@ describe('server', ()=>{
                     "postCode" : "231004",
                 }
             ).then(x=>x)
-            .catch(err => console.log('err', err))
+            .catch(err => err)//console.log('err', err))
 
             expect(response.status).toEqual(400);
         });
     });  
+
+    describe('POST /login', ()=> {
+        beforeEach( async ()=>{
+            await StudentModel.insertMany(mockEntries, { ordered: false });          
+            insertedItems = await StudentModel.find();    
+        });
+        
+        it('should respond with an access token if credentials are correct', async ()=>{
+            const response = await app.post('/login').send({
+                "email" : "mary2@gmail.com",
+                "password" : "1111",
+            }).then(x=>x)
+            .catch(err => console.log('err', err));
+
+            expect(response.body).toBeTruthy()
+            expect(response.status).toEqual(200);
+
+        });
+    })
 });
