@@ -56,7 +56,8 @@ router.post('/login', async (req, res) => {
                     res.status(200).json({
                         success: true,
                         token: token,
-                        name: student.name
+                        firstName: student.firstName,
+                        lastName: student.lastName
                     });
                 };
             }

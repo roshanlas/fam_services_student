@@ -113,7 +113,9 @@ describe('server', ()=>{
             }).then(x=>x)
             .catch(err => console.log('err', err));
 
-            expect(response.body).toBeTruthy()
+            expect(response.body.token).toBeTruthy();
+            expect(response.body.firstName).toBeTruthy();
+            expect(response.body.lastName).toBeTruthy();
             expect(response.status).toEqual(200);
 
         });
