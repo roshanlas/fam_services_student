@@ -191,6 +191,21 @@ describe('server', ()=>{
             .then(x=>x).catch(err=>console.log(err))
         });
         
-        it('should set emailVerified to true if id is correct', ()=>{})
+        it('should set emailVerified to true if id is correct', async ()=>{
+            const response = await app.get('/verify/5c1f639e8bd4400cdec73308')
+            .then(data=>data)
+            .catch(err => console.log('err', err));
+
+            expect(response.status).toEqual(200);
+        });
+
+        it('should return 4xx if id is NOT correct', async ()=>{
+            const response = await app.get('/verify/wrngid')
+            .then(data=>data)
+            .catch(err => console.log('err', err));
+
+            expect(response.body.student.name).toEqual('CastError');
+            expect(response.status).toEqual(400);
+        });
     });
 });

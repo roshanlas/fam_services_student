@@ -81,6 +81,31 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.get('/verify/:id', async (req, res)=>{
+    const student = await StudentModel
+    .updateOne(
+        { _id: req.params.id }, 
+        { $set: { emailVerified: true } }
+    )
+    .then(data=>data)
+    .catch(err=>{ console.log('err', err); return err; });
+
+    if(student.ok && student.ok === 1) {
+        res.status(200).send({
+            msg: 'Email has been verified',
+            student
+        });
+    } else {
+        res.status(400).send({
+            msg: 'Something went wrong',
+            student
+        });
+    }
+});
+
+/**
+ * User story submission (incomplete)
+ */
 router.post('/submit', async () => {
     const student = await StudentModel
     .findOneAndUpdate(
