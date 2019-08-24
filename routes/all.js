@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const StudentModel = require('../models/Student');
 const router = express.Router();
 const keys = require('../config/keys');
-const mailjetFile = require('../87eece9e43945e6918e7baf6748396e3.txt')
 
 router.get('/', (req, res) => {
     res.status(200).send({msg: "done"})
