@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const StudentModel = require('../models/Student');
 const router = express.Router();
 const keys = require('../config/keys');
+const mailjet = require('../mailjet');
 
 router.get('/', (req, res) => {
     res.status(200).send({msg: "done"})
@@ -24,6 +25,7 @@ router.post('/register', async (req, res) => {
         await StudentModel
         .create(req.body)
         .then(result => {
+            mailjet.sendMail('register');
             res.status(200).send({ msg: 'done', result })
         })
         .catch(err => { 
@@ -40,7 +42,7 @@ router.post('/login', async (req, res) => {
     const student = await StudentModel.findOne({ email: req.body.email })
     .then(x=>x).catch(err=>console.log('err', err));
 
-    if(student) {
+    if(student && student.emailVerified) {
         const payload = {
             id: student.id, 
             firstName: student.firstName, 
@@ -68,6 +70,10 @@ router.post('/login', async (req, res) => {
                 };
             }
         );
+    } else if (student && !student.emailVerified) {
+        res.status(400).json({
+            msg: 'Please verify your email'    
+        })
     } else {
         res.status(400).json({
             msg: 'The email or password was incorrect'    
@@ -84,6 +90,7 @@ router.post('/submit', async () => {
     )
     .then(x=>x).catch(err=>console.log('err', err));
 });
+
 
 
 module.exports = router;

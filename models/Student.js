@@ -50,6 +50,9 @@ const StudentModel =  mongoose.model('students',new Schema ({
         type: String,
         required: false
     },
+    emailVerified: {
+        type: Boolean
+    },
     date:{
         type:Date,
         default:Date.now
