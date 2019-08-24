@@ -1,8 +1,8 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const { sampleDB } = require('./sample_db');
+const { sampleSubmissions } = require('./sample_db');
 const server = require('../server');
-const StudentModel = require('./Student');
+const SubmissionModel = require('./Submission');
 
 jest.setTimeout(30000);
 
@@ -17,7 +17,7 @@ describe('server', ()=>{
         // await mongoose.connection.once('open', function () {
         //     console.log("Test DB is connected");
         // });
-        mockEntries = sampleDB;
+        mockEntries = sampleSubmissions;
         app = request( await server() );
     });
 
@@ -27,11 +27,11 @@ describe('server', ()=>{
 
     describe('POST /register', () => {
         beforeEach( async ()=>{
-            await StudentModel.insertMany(mockEntries, { ordered: false });          
-            insertedItems = await StudentModel.find();    
+            await SubmissionModel.insertMany(mockEntries, { ordered: false });          
+            insertedItems = await SubmissionModel.find();    
         });
         afterEach( async ()=>{
-            await StudentModel.deleteMany({})
+            await SubmissionModel.deleteMany({})
             .then(x=>x).catch(err=>console.log(err))
         });
         it('should create a new entry', async () => {
@@ -102,12 +102,12 @@ describe('server', ()=>{
 
     describe('POST /login', ()=> {
         beforeEach( async ()=>{
-            await StudentModel.insertMany(mockEntries, { ordered: false });          
-            insertedItems = await StudentModel.find();    
+            await SubmissionModel.insertMany(mockEntries, { ordered: false });          
+            insertedItems = await SubmissionModel.find();    
         });
 
         afterEach( async ()=>{
-            await StudentModel.deleteMany({})
+            await SubmissionModel.deleteMany({})
             .then(x=>x).catch(err=>console.log(err))
         });
         
