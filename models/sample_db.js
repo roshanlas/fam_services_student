@@ -13,6 +13,7 @@ const sampleDB = [
 		"marriageStatus" : "single",
 		"occupation" : "student",
 		"residence" : "Villa",
+		"country": "Nigeria",
 		"city" : "Abuja",
 		"homeAddress" : "101, Somewhere St.",
 		"postCode" : "231004",

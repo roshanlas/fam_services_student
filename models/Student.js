@@ -38,6 +38,10 @@ const StudentModel =  mongoose.model('students',new Schema ({
         type: String,
         required: false
     },
+    country : {
+        type: String,
+        required: true
+    },
     city : {
         type: String,
         required: true
