@@ -202,7 +202,7 @@ describe('server', ()=>{
             .catch(err => console.log('err', err));
 
             // console.log('response is', response);
-            expect(response.headers.location).toEqual(`${process.env.WEB_APP}/login?verified=true`);
+            expect(response.headers.location).toEqual(`${process.env.WEB_APP}/sign-in?verified=true`);
             expect(response.status).toEqual(302);
         });
 
@@ -212,7 +212,7 @@ describe('server', ()=>{
             .catch(err => console.log('err', err));
 
             // expect(response.body.student.name).toEqual('CastError');
-            expect(response.headers.location).toEqual(`${process.env.WEB_APP}/login?verified=false`)
+            expect(response.headers.location).toEqual(`${process.env.WEB_APP}/sign-in?verified=false`)
             expect(response.status).toEqual(302);
         });
     });

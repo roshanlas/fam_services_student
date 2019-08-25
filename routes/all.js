@@ -106,13 +106,13 @@ router.get('/verify/:id', async (req, res)=>{
         //     msg: 'Email has been verified',
         //     student
         // });
-        res.redirect(`${process.env.WEB_APP}/login?verified=true`);
+        res.redirect(`${process.env.WEB_APP}/sign-in?verified=true`);
     } else {
         // res.status(400).send({
         //     msg: 'Something went wrong',
         //     student
         // });
-        res.redirect(`${process.env.WEB_APP}/login?verified=false`)
+        res.redirect(`${process.env.WEB_APP}/sign-in?verified=false`)
     }
 });
 
