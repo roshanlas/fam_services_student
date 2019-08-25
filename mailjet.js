@@ -19,8 +19,8 @@ const sendMail = (type, email, name, id) => {
                 "Name": name
             }],
             "Subject": "Female and More | Activate Your Account",
-            "TextPart": `Dear ${name}, welcome to Female and More! Our records show you've created an account for ${to}. Please click HERE to validate your email address.`,
-            "HTMLPart": `Dear ${name} 1, welcome to Female and More!<br />Our records show you've created an account for ${to}.<br/> Please click <a href="${activationLink}">HERE</a> to validate your email address.`
+            "TextPart": `Dear ${name}, welcome to Female and More! Our records show you've created an account for ${email}. Please click HERE to validate your email address.`,
+            "HTMLPart": `Dear ${name} 1, welcome to Female and More!<br />Our records show you've created an account for ${email}.<br/> Please click <a href="${activationLink}">HERE</a> to validate your email address.`
         }]
     });
 

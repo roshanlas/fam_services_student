@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const StudentModel = require('../models/Student');
 const router = express.Router();
 const keys = require('../config/keys');
-const mailjet = require('../mailjet');
+const sendMail = require('../mailjet');
 
 router.get('/', (req, res) => {
     res.status(200).send({msg: "done"})
@@ -11,6 +11,10 @@ router.get('/', (req, res) => {
 
 router.get('/87eece9e43945e6918e7baf6748396e3.txt', (req, res)=>{
     res.status(200).sendFile(`${__dirname}/87eece9e43945e6918e7baf6748396e3.txt`)
+});
+
+router.get('/045079fea521ee40d3f9759e64c8a840.txt', (req, res)=>{
+    res.status(200).sendFile(`${__dirname}/045079fea521ee40d3f9759e64c8a840.txt`)
 });
 
 router.post('/register', async (req, res) => {
@@ -25,11 +29,16 @@ router.post('/register', async (req, res) => {
         await StudentModel
         .create(req.body)
         .then(result => {
-            mailjet.sendMail('register');
+            sendMail(
+                'register', 
+                result.email, 
+                result.firstName + ' ' + result.lastName,
+                result._id 
+            );
             res.status(200).send({ msg: 'done', result })
         })
         .catch(err => { 
-            // console.log('service error at /register', err);
+            console.log('service error at /register', err);
             res.status(400).send({msg: 'error', err})
         });
     } else {

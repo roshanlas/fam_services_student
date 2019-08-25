@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const { sampleDB } = require('./sample_db');
 const server = require('../server');
 const StudentModel = require('./Student');
-let mailjet = require('../mailjet');
-// jest.mock("../mailjet", ()=>{ return true; } );
+let sendMail = require('../mailjet');
+jest.mock('../mailjet', () => jest.fn());
 
 jest.setTimeout(30000);
 
@@ -30,9 +30,7 @@ describe('server', ()=>{
     describe('POST /register', () => {
         beforeEach( async ()=>{
             await StudentModel.insertMany(mockEntries, { ordered: false });          
-            insertedItems = await StudentModel.find(); 
-            
-            mailjet.sendMail = jest.fn(x => true);
+            insertedItems = await StudentModel.find();
         });
         afterEach( async ()=>{
             await StudentModel.deleteMany({})
@@ -59,6 +57,7 @@ describe('server', ()=>{
         });
 
         it('should send an email if creation is successful', async ()=> {
+
             const response = await app.post('/register').send(
                 {
                     "email" : "jane@gmail.com",
@@ -75,8 +74,14 @@ describe('server', ()=>{
                     "postCode" : "231004",
                 }
             ); 
+
             expect(response.status).toEqual(200);
-            expect(mailjet.sendMail).toHaveBeenCalledWith('register');
+            expect(sendMail).toHaveBeenCalledWith(
+                'register', 
+                'jane@gmail.com', 
+                'Jane Jo', 
+                expect.any(Object)
+            );
         });
 
         it('should NOT create a new entry if the email exists', async () => {
