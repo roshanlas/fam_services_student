@@ -4,6 +4,7 @@ const StudentModel = require('../models/Student');
 const router = express.Router();
 const keys = require('../config/keys');
 const sendMail = require('../mailjet');
+require('dotenv').config();
 
 router.get('/', (req, res) => {
     res.status(200).send({msg: "done"})
@@ -29,13 +30,14 @@ router.post('/register', async (req, res) => {
         await StudentModel
         .create(req.body)
         .then(result => {
+            res.status(200).send({ msg: 'done', result });
+
             sendMail(
                 'register', 
                 result.email, 
                 result.firstName + ' ' + result.lastName,
                 result._id 
             );
-            res.status(200).send({ msg: 'done', result })
         })
         .catch(err => { 
             console.log('service error at /register', err);
@@ -100,15 +102,17 @@ router.get('/verify/:id', async (req, res)=>{
     .catch(err=>{ console.log('err', err); return err; });
 
     if(student.ok && student.ok === 1) {
-        res.status(200).send({
-            msg: 'Email has been verified',
-            student
-        });
+        // res.status(200).send({
+        //     msg: 'Email has been verified',
+        //     student
+        // });
+        res.redirect(`${process.env.WEB_APP}/login?verified=true`);
     } else {
-        res.status(400).send({
-            msg: 'Something went wrong',
-            student
-        });
+        // res.status(400).send({
+        //     msg: 'Something went wrong',
+        //     student
+        // });
+        res.redirect(`${process.env.WEB_APP}/login?verified=false`)
     }
 });
 

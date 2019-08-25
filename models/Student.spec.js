@@ -201,7 +201,9 @@ describe('server', ()=>{
             .then(data=>data)
             .catch(err => console.log('err', err));
 
-            expect(response.status).toEqual(200);
+            // console.log('response is', response);
+            expect(response.headers.location).toEqual(`${process.env.WEB_APP}/login?verified=true`);
+            expect(response.status).toEqual(302);
         });
 
         it('should return 4xx if id is NOT correct', async ()=>{
@@ -209,8 +211,9 @@ describe('server', ()=>{
             .then(data=>data)
             .catch(err => console.log('err', err));
 
-            expect(response.body.student.name).toEqual('CastError');
-            expect(response.status).toEqual(400);
+            // expect(response.body.student.name).toEqual('CastError');
+            expect(response.headers.location).toEqual(`${process.env.WEB_APP}/login?verified=false`)
+            expect(response.status).toEqual(302);
         });
     });
 });
