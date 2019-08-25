@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const StudentModel = require('../models/Student');
 const router = express.Router();
 const keys = require('../config/keys');
+const sendMail = require('../mailjet');
+require('dotenv').config();
 
 router.get('/', (req, res) => {
     res.status(200).send({msg: "done"})
@@ -28,7 +30,14 @@ router.post('/register', async (req, res) => {
         await StudentModel
         .create(req.body)
         .then(result => {
-            res.status(200).send({ msg: 'done', result })
+            res.status(200).send({ msg: 'done', result });
+
+            sendMail(
+                'register', 
+                result.email, 
+                result.firstName + ' ' + result.lastName,
+                result._id 
+            );
         })
         .catch(err => { 
             console.log('service error at /register', err);
@@ -44,7 +53,7 @@ router.post('/login', async (req, res) => {
     const student = await StudentModel.findOne({ email: req.body.email })
     .then(x=>x).catch(err=>console.log('err', err));
 
-    if(student) {
+    if(student && student.emailVerified) {
         const payload = {
             id: student.id, 
             firstName: student.firstName, 
@@ -72,6 +81,10 @@ router.post('/login', async (req, res) => {
                 };
             }
         );
+    } else if (student && !student.emailVerified) {
+        res.status(400).json({
+            msg: 'Please verify your email'    
+        })
     } else {
         res.status(400).json({
             msg: 'The email or password was incorrect'    
@@ -79,6 +92,33 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.get('/verify/:id', async (req, res)=>{
+    const student = await StudentModel
+    .updateOne(
+        { _id: req.params.id }, 
+        { $set: { emailVerified: true } }
+    )
+    .then(data=>data)
+    .catch(err=>{ console.log('err', err); return err; });
+
+    if(student.ok && student.ok === 1) {
+        // res.status(200).send({
+        //     msg: 'Email has been verified',
+        //     student
+        // });
+        res.redirect(`${process.env.WEB_APP}/login?verified=true`);
+    } else {
+        // res.status(400).send({
+        //     msg: 'Something went wrong',
+        //     student
+        // });
+        res.redirect(`${process.env.WEB_APP}/login?verified=false`)
+    }
+});
+
+/**
+ * User story submission (incomplete)
+ */
 router.post('/submit', async () => {
     const student = await StudentModel
     .findOneAndUpdate(
@@ -88,6 +128,7 @@ router.post('/submit', async () => {
     )
     .then(x=>x).catch(err=>console.log('err', err));
 });
+
 
 
 module.exports = router;

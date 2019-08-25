@@ -11,7 +11,7 @@ const sendMail = (type, email, name, id) => {
     .request({
         "Messages":[{
             "From": {
-                "Email": "registration@famservicesstudent.azurewebsites.net",
+                "Email": "registration@femaleandmore.org",
                 "Name": "Female and More"
             },
             "To": [{
@@ -19,19 +19,19 @@ const sendMail = (type, email, name, id) => {
                 "Name": name
             }],
             "Subject": "Female and More | Activate Your Account",
-            "TextPart": `Dear ${name}, welcome to Female and More! Our records show you've created an account for ${email}. Please click HERE to validate your email address.`,
-            "HTMLPart": `Dear ${name} 1, welcome to Female and More!<br />Our records show you've created an account for ${email}.<br/> Please click <a href="${activationLink}">HERE</a> to validate your email address.`
+            "TextPart": `Dear ${name}, Welcome to Female and More! Our records show you've created an account for ${email}. Please click HERE to validate your email address.`,
+            "HTMLPart": `Dear ${name} 1, <br/><br/>Welcome to Female and More!<br /><br/>Our records show you've created an account for ${email}.<br/><br/> Please click <a href="${activationLink}">HERE</a> to validate your email address.`
         }]
     });
 
     request
     .then((result) => {
-        console.log(result.body);
-        res.send({ msg: 'done', result: result.body })
+        console.log('sent', result.body);
+        return result.body
     })
     .catch((err) => {
         console.log(err.statusCode);
-        res.send({ msg: 'err', result: err })
+        return err;
     })
 };
 
