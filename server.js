@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const server = express();
+const passport = require('passport');
 const keys = require('./config/keys');
-const routes = require('./routes/all');
 
  const runServer = async () => {
     const port = process.env.PORT || 3011;
@@ -29,7 +29,17 @@ const routes = require('./routes/all');
     server.use(bodyParser.urlencoded({ extended: false }));
     server.use(bodyParser.json());
     server.use(cors());
-    server.use('/', routes);
+
+    // Init passportjs
+    server.use(passport.initialize());
+    // Import the function from file the and invoke immediately
+    require('./config/passport')(passport);
+
+    const storyRoutes = require('./routes/Submission');
+    server.use('/submission', passport.authenticate('jwt', {session:false}), storyRoutes);
+
+    const authRoutes = require('./routes/Auth');
+    server.use('/', authRoutes);
 
     // If port is specified, user it. Otherwise default to 5000
     server.set('port', port);

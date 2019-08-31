@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const SubmissionModel =  mongoose.model('submission',new Schema ({
+const StoryModel =  mongoose.model('submission',new Schema ({
     email: {
         type: String,
         required: true
     },
-    story: {
+    storyID: {
         type: String
     },
     submission: {
         type: Object
+    },
+    final: {
+        type: Boolean
     }
 }, {collection: 'submission'}));
 
-module.exports = SubmissionModel;
+module.exports = StoryModel;

@@ -2,7 +2,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const { sampleDB } = require('./sample_db');
 const server = require('../server');
-const StudentModel = require('./Student');
+const StudentModel = require('./Student');``
 let sendMail = require('../mailjet');
 jest.mock('../mailjet', () => jest.fn());
 
@@ -189,7 +189,7 @@ describe('server', ()=>{
         });
     });
 
-    describe('/verify', ()=> {
+    describe('GET /verify', ()=> {
         beforeEach( async ()=>{
             await StudentModel.insertMany(mockEntries, { ordered: false });          
             insertedItems = await StudentModel.find();    
@@ -218,6 +218,28 @@ describe('server', ()=>{
             // expect(response.body.student.name).toEqual('CastError');
             expect(response.headers.location).toEqual(`${process.env.WEB_APP}/sign-in?verified=false`)
             expect(response.status).toEqual(302);
+        });
+    });
+
+    describe('GET /submission/', () => {
+        beforeEach( async ()=>{
+            await StudentModel.insertMany(mockEntries, { ordered: false });          
+            insertedItems = await StudentModel.find();    
+        });
+
+        afterEach( async ()=>{
+            await StudentModel.deleteMany({})
+            .then(data=>data)
+            .catch(err=>console.log(err))
+        });
+
+        it('should retrieve student submission if credentials correct', async () => {
+
+            const response = await app.get('/submission/retrieve')
+            .then(data=>data)
+            .catch(err => console.log('err', err));
+
+            expect(response.status).toEqual(200);
         });
     });
 });

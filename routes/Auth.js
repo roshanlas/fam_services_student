@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const StudentModel = require('../models/Student');
+const SubmissionModel = require('../models/Submission');
 const router = express.Router();
 const keys = require('../config/keys');
 const sendMail = require('../mailjet');
@@ -50,8 +51,10 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
 
-    const student = await StudentModel.findOne({ email: req.body.email })
-    .then(x=>x).catch(err=>console.log('err', err));
+    const student = await StudentModel.findOne({ 
+        email: req.body.email 
+    })
+    .then(data=>data).catch(err=>console.log('err', err));
 
     if(student && student.emailVerified) {
         const payload = {
@@ -115,20 +118,5 @@ router.get('/verify/:id', async (req, res)=>{
         res.redirect(`${process.env.WEB_APP}/sign-in?verified=false`)
     }
 });
-
-/**
- * User story submission (incomplete)
- */
-router.post('/submit', async () => {
-    const student = await StudentModel
-    .findOneAndUpdate(
-        { email: req.body.email }, 
-        submission, 
-        { upsert: true }
-    )
-    .then(x=>x).catch(err=>console.log('err', err));
-});
-
-
 
 module.exports = router;
