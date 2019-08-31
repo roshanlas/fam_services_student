@@ -1,72 +1,60 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const StudentModel = require('../models/Student');
 const router = express.Router();
-const keys = require('../config/keys');
+const stories = require('../stories');
+const axios = require('axios');
+
+
+const makeCalendar = (dayOfWeek, dayOfMonth) => {
+    let calendar = [];
+    calendar[dayOfWeek] = dayOfMonth;
+
+    for(var i = dayOfWeek-1; i>=1; i--) {
+        calendar[i] = dayOfMonth-(dayOfWeek-i);
+    }
+    for(var i = dayOfWeek+1; i<=7; i++) {
+        calendar[i] = dayOfMonth > 31 ? i: dayOfMonth+(i-dayOfWeek);
+        console.log( calendar[i] );
+    }
+	calendar.shift();
+    return calendar;
+}
 
 router.get('/', (req, res) => {
     res.status(200).send("done")
 });
 
+router.post('/story-of-day', async (req, res) => {
 
-router.post('/register', async (req, res) => {
-    const student = await StudentModel.findOne({ email: req.body.email })
-    .then(x=>x).catch(err=>console.log('err', err));
-    
-    if(student) {
-        res.status(400).send({ msg: 'An account with that email address exists.' });
-        return;
-    }
-
-    const newStudent = await StudentModel
-    .create(req.body)
-    .then(result => {
-        res.status(200).send({ msg: 'done' })
+    const timeRequest = await axios.get('http://worldtimeapi.org/api/timezone/Africa/Lagos.json')
+    .then((response) => response)
+    .catch((error) => {
+        console.log('error', error)
     })
-    .catch(err => { 
-       // console.log('err', err);
-       res.status(400).send({msg: err})
+    .then((response) => response);
+
+    // const calendar = makeCalendar(
+    //     timeRequest.data.day_of_week,
+    //     parseInt(new Date('2019-08-31T17:32:27.944196+00:00').getDate())
+    // )
+
+    res.status(200).send({
+        // calendar: calendar,
+        dayOfWeek: timeRequest.data.day_of_week,
+        dayOfMonth: new Date('2019-08-31T17:32:27.944196+00:00').getDate(),
+        currentDay: timeRequest.data.day_of_week,
+        story: stories[timeRequest.data.day_of_week]
     });
-});
+    // const student = await StudentModel.findOne({ email: req.body.email })
+    // .then(x=>x).catch(err=>console.log('err', err));
 
-router.post('/login', async (req, res) => {
+    // if(student) {
 
-    const student = await StudentModel.findOne({ email: req.body.email })
-    .then(x=>x).catch(err=>console.log('err', err));
 
-    if(student) {
-        const payload = {
-            id: student.id, 
-            firstName: student.firstName, 
-            lastName: student.lastName, 
-            email: student.email
-        };
-
-        // Sign Token
-        await jwt.sign(
-            payload,
-            keys.secret,
-            (err, token) => {
-                if (err) {
-                    res.status(400).json({
-                        msg: err    
-                    })
-                }
-                else {
-                    res.status(200).json({
-                        success: true,
-                        token: token,
-                        firstName: student.firstName,
-                        lastName: student.lastName
-                    });
-                };
-            }
-        );
-    } else {
-        res.status(400).json({
-            msg: 'The email or password was incorrect'    
-        })
-    }
+    // } else {
+    //     res.status(400).json({
+    //         msg: 'The email or password was incorrect'    
+    //     })
+    // }
 });
 
 

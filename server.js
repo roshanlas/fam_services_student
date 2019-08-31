@@ -7,7 +7,7 @@ const keys = require('./config/keys');
 const routes = require('./routes/all');
 
  const runServer = async () => {
-    const port = process.env.PORT || 3011;
+    const port = process.env.PORT || 3012;
     let dbUrl;
     
     if (process.env.NODE_ENV == "test") {

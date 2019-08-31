@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const StudentModel =  mongoose.model('students',new Schema ({
+const StoryModel =  mongoose.model('students',new Schema ({
     email:{
         type:String, 
         required:true
@@ -56,4 +56,4 @@ const StudentModel =  mongoose.model('students',new Schema ({
     }
 }, {collection: 'students'}));
 
-module.exports = StudentModel;
+module.exports = StoryModel;
