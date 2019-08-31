@@ -12,7 +12,7 @@ variables:
   azureSubscription: 'e16e3718-0849-44b3-b1c1-0ce0d815b50d'
 
   # Web app name
-  webAppName: 'FamServicesStudent'
+  webAppName: 'FamStoriesService'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -61,7 +61,7 @@ stages:
               buildType: current
             
           - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: FamServicesStudent'
+            displayName: 'Azure App Service Deploy: FamStoriesService'
             inputs:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
