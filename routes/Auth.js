@@ -52,7 +52,8 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
 
     const student = await StudentModel.findOne({ 
-        email: req.body.email 
+        email: req.body.email,
+        password: req.body.password
     })
     .then(data=>data).catch(err=>console.log('err', err));
 

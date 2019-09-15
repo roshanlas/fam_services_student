@@ -10,15 +10,9 @@ jest.setTimeout(30000);
 
 describe('server', ()=>{
     let app;
-    let serverInstance;
     let mockEntries;
-    let insertedItems;
 
     beforeAll( async () => {
-        // await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true });
-        // await mongoose.connection.once('open', function () {
-        //     console.log("Test DB is connected");
-        // });
         mockEntries = sampleDB;
         app = request( await server() );
     });
@@ -218,28 +212,6 @@ describe('server', ()=>{
             // expect(response.body.student.name).toEqual('CastError');
             expect(response.headers.location).toEqual(`${process.env.WEB_APP}/sign-in?verified=false`)
             expect(response.status).toEqual(302);
-        });
-    });
-
-    describe('GET /submission/', () => {
-        beforeEach( async ()=>{
-            await StudentModel.insertMany(mockEntries, { ordered: false });          
-            insertedItems = await StudentModel.find();    
-        });
-
-        afterEach( async ()=>{
-            await StudentModel.deleteMany({})
-            .then(data=>data)
-            .catch(err=>console.log(err))
-        });
-
-        it('should retrieve student submission if credentials correct', async () => {
-
-            const response = await app.get('/submission/retrieve')
-            .then(data=>data)
-            .catch(err => console.log('err', err));
-
-            expect(response.status).toEqual(200);
         });
     });
 });
