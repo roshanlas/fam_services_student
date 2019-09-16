@@ -77,6 +77,7 @@ router.post('/login', async (req, res) => {
                 }
                 else {
                     res.status(200).json({
+                        password :req.body.password,
                         success: true,
                         token: token,
                         firstName: student.firstName,
