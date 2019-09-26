@@ -38,6 +38,9 @@ const keys = require('./config/keys');
     const storyRoutes = require('./routes/Submission');
     
     server.use('/submission', passport.authenticate('jwt', {session:false}), storyRoutes);
+    
+    const profileRoutes = require('./routes/Profile');
+    server.use('/profile', passport.authenticate('jwt', {session:false}), profileRoutes);
 
     const authRoutes = require('./routes/Auth');
     server.use('/', authRoutes);
